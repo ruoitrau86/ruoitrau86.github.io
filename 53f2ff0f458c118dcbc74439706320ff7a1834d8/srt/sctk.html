@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Sctk &mdash; kocochi 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="kocochi 1.0 documentation" href="../index.html"/>
+        <link rel="next" title="Phonopy (with VASP)" href="phonopy.html"/>
+        <link rel="prev" title="Akai-KKR" href="akaikkr.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> kocochi
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="qe.html">Quantum ESPRESSO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vasp.html">VASP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elk.html">ELK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="akaikkr.html">Akai-KKR</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Sctk</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#scf-calculation-of-the-charge-density">SCF calculation of the charge density</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculations-of-phonon-and-electron-phonon-interaction">Calculations of phonon and electron-phonon interaction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#calculation-of-phonon-frequency-and-deformation-potential">Calculation of phonon frequency and deformation potential</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculation-of-electron-phonon-interaction">Calculation of electron-phonon interaction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#calculation-of-screened-coulomb-interaction">Calculation of screened Coulomb interaction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#non-scf-calculation-with-a-dense-grid">Non-SCF calculation with a dense <span class="math">\(k\)</span> grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculation-of-wave-functions-for-the-screened-coulomb-interaction">Calculation of wave functions for the screened Coulomb interaction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Calculation of screened Coulomb interaction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#scdft-scf-calculation">SCDFT SCF calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#post-processing">Post processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="phonopy.html">Phonopy (with VASP)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">kocochi</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Sctk</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/srt/sctk.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sctk">
+<h1>Sctk<a class="headerlink" href="#sctk" title="Permalink to this headline">¶</a></h1>
+<p>The following tutorial should be done in <code class="docutils literal"><span class="pre">sample/</span></code>.</p>
+<p>The pseudopotentials</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">B</span><span class="o">.</span><span class="n">pbe</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="n">rrkjus_psl</span><span class="o">.</span><span class="mf">0.1</span><span class="o">.</span><span class="n">UPF</span>
+<span class="n">Mg</span><span class="o">.</span><span class="n">pbe</span><span class="o">-</span><span class="n">n</span><span class="o">-</span><span class="n">rrkjus_psl</span><span class="o">.</span><span class="mf">0.3</span><span class="o">.</span><span class="mf">0.</span><span class="n">UPF</span>
+</pre></div>
+</div>
+<p>are the part of the <a class="reference external" href="http://theossrv1.epfl.ch/Main/Pseudopotentials">PS Library</a>
+developed by <a class="reference external" href="http://theossrv1.epfl.ch/">THEOS group</a>.</p>
+<div class="section" id="scf-calculation-of-the-charge-density">
+<span id="scf"></span><h2>SCF calculation of the charge density<a class="headerlink" href="#scf-calculation-of-the-charge-density" title="Permalink to this headline">¶</a></h2>
+<p><strong>Input file</strong>: scf.in</p>
+<p><strong>Program</strong>: pw.x (Quantum ESPRESSO)</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mpiexec option PATH/pw.x option -in scf.in &gt; scf.out
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mpiexec</span> <span class="n">option</span> <span class="n">PATH</span><span class="o">/</span><span class="n">pw</span><span class="o">.</span><span class="n">x</span> <span class="n">option</span> <span class="o">-</span><span class="ow">in</span> <span class="n">scf</span><span class="o">.</span><span class="ow">in</span> <span class="o">&gt;</span> <span class="n">scf</span><span class="o">.</span><span class="n">out</span>
+</pre></div>
+</div>
+<p>Run <code class="docutils literal"><span class="pre">pw.x</span></code> with <code class="docutils literal"><span class="pre">calculation</span> <span class="pre">=</span> <span class="pre">&quot;scf&quot;</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We can perform first whether <a class="reference internal" href="#phonon"><span class="std std-ref">Calculations of phonon and electron-phonon interaction</span></a> or <cite>coulomb</cite> .</p>
+</div>
+</div>
+<div class="section" id="calculations-of-phonon-and-electron-phonon-interaction">
+<span id="phonon"></span><h2>Calculations of phonon and electron-phonon interaction<a class="headerlink" href="#calculations-of-phonon-and-electron-phonon-interaction" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="calculation-of-phonon-frequency-and-deformation-potential">
+<span id="ph"></span><h3>Calculation of phonon frequency and deformation potential<a class="headerlink" href="#calculation-of-phonon-frequency-and-deformation-potential" title="Permalink to this headline">¶</a></h3>
+<p><strong>Input file</strong>: ph.in</p>
+<p><strong>Program</strong>: ph.x (Quantum ESPRESSO)</p>
+<p><strong>Important parameter</strong></p>
+<blockquote>
+<div><dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">fildyn</span> <span class="pre">=</span> <span class="pre">'mgb2.dyn'</span></code>: The file name for the dynamical matrix;</dt>
+<dd>It will be used in the next step.</dd>
+<dt><code class="docutils literal"><span class="pre">fildvscf</span> <span class="pre">=</span> <span class="pre">'dv',</span></code>: The file name for the deformation potential.</dt>
+<dd>It will be used in the next step.</dd>
+</dl>
+<p><code class="docutils literal"><span class="pre">ldisp</span> <span class="pre">=</span> <span class="pre">.true.</span></code>: We compute phonons on the uniform <span class="math">\(q\)</span> grid.</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">lshift_q</span> <span class="pre">=</span> <span class="pre">.true.</span></code>: We shift the <span class="math">\(q\)</span> grid for avoiding</dt>
+<dd>the singularity at <span class="math">\(\Gamma\)</span> point.</dd>
+</dl>
+<p><code class="docutils literal"><span class="pre">nq1,</span> <span class="pre">nq2,</span> <span class="pre">nq3</span></code>: The <span class="math">\(q\)</span> grid.</p>
+</div></blockquote>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mpiexec option PATH/ph.x option -in ph.in &gt; ph.out
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are familiar to the <code class="docutils literal"><span class="pre">ph.x</span></code> program,
+it is better to run in each <span class="math">\(q\)</span> separately.</p>
+</div>
+</div>
+<div class="section" id="calculation-of-electron-phonon-interaction">
+<span id="elph"></span><h3>Calculation of electron-phonon interaction<a class="headerlink" href="#calculation-of-electron-phonon-interaction" title="Permalink to this headline">¶</a></h3>
+<p><strong>Input file</strong>: elph.in</p>
+<p><strong>Program</strong>: ph.x (Quantum ESPRESSO)</p>
+<p><strong>Important parameter</strong></p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">electron_phonon</span> <span class="pre">=</span> <span class="pre">&quot;scdft_input&quot;</span></code>:
+compute the electron-phonon vertex from the deformation potential and
+the dynamical matrix that are already computed.</p>
+<p><code class="docutils literal"><span class="pre">elph_nbnd_min,</span> <span class="pre">elph_nbnd_max</span></code>:
+Since the electron-phonon interaction between the electronic states
+only in the vicinity of the Fermi surface affect the gap equation,
+we can reduce bands to decrease the numerical cost.
+The upper- and the lower limit of the bands that contain the Fermi level
+can be obtained by a program <code class="docutils literal"><span class="pre">fermi_velocity.x</span></code> in patched Quantum ESPRESSO.</p>
+</div></blockquote>
+<p>By running <code class="docutils literal"><span class="pre">ph.x</span></code> with <code class="docutils literal"><span class="pre">electron_phonon</span> <span class="pre">=</span> <span class="pre">&quot;scdft_input&quot;</span></code>,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mpiexec option PATH/ph.x option -in elph.in &gt; elph.out
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="calculation-of-screened-coulomb-interaction">
+<span id="coulomb"></span><h2>Calculation of screened Coulomb interaction<a class="headerlink" href="#calculation-of-screened-coulomb-interaction" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="non-scf-calculation-with-a-dense-grid">
+<span id="dense"></span><h3>Non-SCF calculation with a dense <span class="math">\(k\)</span> grid<a class="headerlink" href="#non-scf-calculation-with-a-dense-grid" title="Permalink to this headline">¶</a></h3>
+<p><strong>Input file</strong>: nscf.in</p>
+<p><strong>Program</strong>: pw.x (Quantum ESPRESSO)</p>
+<p><strong>Important parameter</strong></p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">calculation</span> <span class="pre">=</span> <span class="pre">&quot;nscf&quot;</span></code></p>
+<p><code class="docutils literal"><span class="pre">nbnd</span></code>: For the calculating of the polarization function,
+we have to compute some empty states.
+We do not have to include so many empty state
+as the calculation of the insulator.
+Typically, the number of empty states becomes
+the same as the number of occupied states.</p>
+</div></blockquote>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mpiexec option PATH/pw.x option -in nscf.in &gt; nscf.out
+</pre></div>
+</div>
+<p>Run <code class="docutils literal"><span class="pre">pw.x</span></code> with <code class="docutils literal"><span class="pre">calculation</span> <span class="pre">=</span> <span class="pre">&quot;nscf&quot;</span></code>.
+Then execute <code class="docutils literal"><span class="pre">get_eigval.x</span></code></p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>PATH/get_eigval.x
+</pre></div>
+</div>
+<p>Input <code class="docutils literal"><span class="pre">prefix</span></code> the same as that of <code class="docutils literal"><span class="pre">pw.x</span></code>.</p>
+</div>
+<div class="section" id="calculation-of-wave-functions-for-the-screened-coulomb-interaction">
+<span id="twin"></span><h3>Calculation of wave functions for the screened Coulomb interaction<a class="headerlink" href="#calculation-of-wave-functions-for-the-screened-coulomb-interaction" title="Permalink to this headline">¶</a></h3>
+<p><strong>Input file</strong>: twin.in</p>
+<p><strong>Program</strong>: pw.x (Quantum ESPRESSO)</p>
+<p><strong>Important parameter</strong></p>
+<p><code class="docutils literal"><span class="pre">wf_collect</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">calculation</span> <span class="pre">=</span> <span class="pre">&quot;bands&quot;</span></code>:</dt>
+<dd>Generated <span class="math">\(k\)</span> points by using
+<span class="xref std std-ref">twingrid</span> and redirect it to the input file as follows:</dd>
+</dl>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>PATH/twingrid.sh <span class="m">6</span> <span class="m">6</span> <span class="m">4</span> &gt;&gt; twin.in
+</pre></div>
+</div>
+<p>This <span class="math">\(k\)</span> mesh must be the same as <code class="docutils literal"><span class="pre">nq1</span></code>, <code class="docutils literal"><span class="pre">nq2</span></code>, and <code class="docutils literal"><span class="pre">nq3</span></code> in the
+input of <code class="docutils literal"><span class="pre">ph.x</span></code> at Sec. <a class="reference internal" href="#elph"><span class="std std-ref">Calculation of electron-phonon interaction</span></a> Then run <code class="docutils literal"><span class="pre">pw.x</span></code> with this input file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mpiexec option PATH/pw.x option -in twin.in &gt; twin.out
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>Calculation of screened Coulomb interaction<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p><strong>Input file</strong>: rpa.in</p>
+<p><strong>Program</strong>: <span class="xref std std-ref">rpa_el.x</span></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This part can be performed in each <span class="math">\(q\)</span> point separately by creating
+input files with different <code class="docutils literal"><span class="pre">first_q</span></code> and run simultaneously.</p>
+</div>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mpiexec option PATH/rpa_el.x &lt; rpa.in &gt; rpa.out
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="scdft-scf-calculation">
+<span id="scdftscf"></span><h2>SCDFT SCF calculation<a class="headerlink" href="#scdft-scf-calculation" title="Permalink to this headline">¶</a></h2>
+<p><strong>Input file</strong>: scdft.in</p>
+<p><strong>Program</strong>: <span class="xref std std-ref">scdft</span></p>
+<p>After all calculation in <a class="reference internal" href="#phonon"><span class="std std-ref">Calculations of phonon and electron-phonon interaction</span></a> and <a class="reference internal" href="#coulomb"><span class="std std-ref">Calculation of screened Coulomb interaction</span></a> finished,
+we can start SCDFT calculation.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mpiexec option PATH/scdft.x &lt; scdft.in &gt; scdft.out
+</pre></div>
+</div>
+</div>
+<div class="section" id="post-processing">
+<h2>Post processing<a class="headerlink" href="#post-processing" title="Permalink to this headline">¶</a></h2>
+<p><strong>Input file</strong>: scdft.in</p>
+<p><strong>Program</strong>: <span class="xref std std-ref">deltaf</span></p>
+<p>We can compute the following quantities from
+<code class="docutils literal"><span class="pre">delta.dat</span></code> ( <span class="math">\(\Delta_{n k}\)</span> which is generated in Sec. <a class="reference internal" href="#scdftscf"><span class="std std-ref">SCDFT SCF calculation</span></a> .</p>
+<p><span class="math">\(\Delta_{n k}\)</span> on the Fermi surface.
+FermiSurfer( <a class="reference external" href="http://fermisurfer.osdn.jp/">http://fermisurfer.osdn.jp/</a> ) can display this data.</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>mpiexec option PATH/deltaf.x &lt; scdft.in &gt; deltaf.out
+</pre></div>
+</div>
+<div class="figure" id="id2">
+<img alt="../_images/gap_mgb2.png" src="../_images/gap_mgb2.png" />
+<p class="caption"><span class="caption-text">Gap function on the Fermi surface of MgB<span class="math">\(_2\)</span> .</span></p>
+</div>
+</div></blockquote>
+<p>Quasi particle DOS. It requires long computational time.</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>mpiexec option PATH/qpdos.x &lt; scdft.in &gt; qpdos.out
+</pre></div>
+</div>
+</div></blockquote>
+<p>Ultrasonic attenuation coefficient(experimental). Results are in
+standard output.</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>mpiexec option PATH/ultrasonic.x &lt; scdft.in &gt; ultrasonic.out
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="phonopy.html" class="btn btn-neutral float-right" title="Phonopy (with VASP)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="akaikkr.html" class="btn btn-neutral" title="Akai-KKR" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ruoitrau.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

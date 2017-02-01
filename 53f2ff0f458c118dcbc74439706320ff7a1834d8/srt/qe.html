@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quantum ESPRESSO &mdash; kocochi 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="kocochi 1.0 documentation" href="../index.html"/>
+        <link rel="next" title="VASP" href="vasp.html"/>
+        <link rel="prev" title="Kocochi!" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> kocochi
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quantum ESPRESSO</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#calculate-the-density-of-states-using-tetrahedron-method-with-fine-k-mesh">Calculate the density of states using tetrahedron method with fine k mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculate-the-electron-phonon-couplings-using-8x8x8-k-and-q-mesh">Calculate the electron-phonon couplings using 8x8x8 k and q-mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculate-lambda-and-omega-log-using-the-gaussian-smearing-method">Calculate lambda and omega_log using the Gaussian smearing method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculate-lambda-and-omega-log-using-the-weighted-average-method">Calculate lambda and omega_log using the weighted average method</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vasp.html">VASP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elk.html">ELK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="akaikkr.html">Akai-KKR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sctk.html">Sctk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phonopy.html">Phonopy (with VASP)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">kocochi</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Quantum ESPRESSO</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/srt/qe.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <img alt="../_images/qe.jpg" src="../_images/qe.jpg" />
+<div class="section" id="quantum-espresso">
+<h1>Quantum ESPRESSO<a class="headerlink" href="#quantum-espresso" title="Permalink to this headline">¶</a></h1>
+<p id="scf"><strong>Input file</strong>: scf.in</p>
+<p>This example tests lambda_weight.x for the Nb case.
+You can also find the whole options of lambda_weight.x in lambda_weight.f90.</p>
+<div class="section" id="calculate-the-density-of-states-using-tetrahedron-method-with-fine-k-mesh">
+<h2>Calculate the density of states using tetrahedron method with fine k mesh<a class="headerlink" href="#calculate-the-density-of-states-using-tetrahedron-method-with-fine-k-mesh" title="Permalink to this headline">¶</a></h2>
+<p>pw.x &lt; scf_dos.in &gt; scf_dos.out</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span> <span class="p">&amp;</span>control
+    <span class="nv">calculation</span><span class="o">=</span><span class="s1">&#39;scf&#39;</span>
+    <span class="nv">restart_mode</span><span class="o">=</span><span class="s1">&#39;from_scratch&#39;</span>,
+    <span class="nv">prefix</span><span class="o">=</span><span class="s1">&#39;nb&#39;</span>,
+    <span class="nv">pseudo_dir</span> <span class="o">=</span> <span class="s1">&#39;~/PWSCF/pseudo&#39;</span>,
+    <span class="nv">outdir</span><span class="o">=</span><span class="s1">&#39;./work&#39;</span>
+    <span class="nv">disk_io</span><span class="o">=</span><span class="s1">&#39;low&#39;</span>
+    <span class="nv">wf_collect</span><span class="o">=</span>.true.
+ /
+ <span class="p">&amp;</span>system
+    <span class="nv">ibrav</span><span class="o">=</span>  3, celldm<span class="o">(</span>1<span class="o">)</span> <span class="o">=</span> 6.246, <span class="nv">nat</span><span class="o">=</span>  1, <span class="nv">ntyp</span><span class="o">=</span> 1,
+    <span class="nv">ecutwfc</span> <span class="o">=</span> 30.0,
+    <span class="nv">ecutrho</span> <span class="o">=</span> 300,
+    <span class="nv">occupations</span><span class="o">=</span><span class="s1">&#39;tetrahedra&#39;</span>,
+ /
+ <span class="p">&amp;</span>electrons
+    <span class="nv">conv_thr</span> <span class="o">=</span>  1.0d-10
+    <span class="nv">mixing_beta</span> <span class="o">=</span> 0.7
+ /
+ <span class="p">&amp;</span>ions
+ /
+ <span class="p">&amp;</span>cell
+ /
+ATOMIC_SPECIES
+Nb   92.90638   Nb.pbe-nsp-van.UPF
+ATOMIC_POSITIONS
+Nb 0.00 0.00 0.00
+K_POINTS <span class="o">{</span>automatic<span class="o">}</span>
+<span class="m">50</span> <span class="m">50</span> <span class="m">50</span>  <span class="m">0</span> <span class="m">0</span> 0
+</pre></div>
+</div>
+<p>dos.x &lt; dos.in &gt; dos.out</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="o">&amp;</span><span class="n">dos</span>
+  <span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;nb&#39;</span>
+  <span class="n">outdir</span> <span class="o">=</span> <span class="s1">&#39;./work&#39;</span>
+  <span class="n">Emin</span> <span class="o">=</span> <span class="mf">17.9095</span>
+  <span class="n">Emax</span> <span class="o">=</span> <span class="mf">17.9095</span>
+<span class="o">/</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calculate-the-electron-phonon-couplings-using-8x8x8-k-and-q-mesh">
+<h2>Calculate the electron-phonon couplings using 8x8x8 k and q-mesh<a class="headerlink" href="#calculate-the-electron-phonon-couplings-using-8x8x8-k-and-q-mesh" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>pw.x &lt; scf.in &gt; scf.out</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span></span> <span class="o">&amp;</span><span class="n">control</span>
+    <span class="n">calculation</span><span class="o">=</span><span class="s1">&#39;scf&#39;</span>
+    <span class="n">restart_mode</span><span class="o">=</span><span class="s1">&#39;from_scratch&#39;</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;nb&#39;</span><span class="p">,</span>
+    <span class="n">pseudo_dir</span> <span class="o">=</span> <span class="s1">&#39;~/PWSCF/pseudo&#39;</span><span class="p">,</span>
+    <span class="n">outdir</span><span class="o">=</span><span class="s1">&#39;./work&#39;</span>
+    <span class="n">disk_io</span><span class="o">=</span><span class="s1">&#39;low&#39;</span>
+ <span class="o">/</span>
+ <span class="o">&amp;</span><span class="n">system</span>
+    <span class="n">ibrav</span><span class="o">=</span>  <span class="mi">3</span><span class="p">,</span> <span class="n">celldm</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">6.246</span><span class="p">,</span> <span class="n">nat</span><span class="o">=</span>  <span class="mi">1</span><span class="p">,</span> <span class="n">ntyp</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">ecutwfc</span> <span class="o">=</span> <span class="mf">30.0</span><span class="p">,</span>
+    <span class="n">ecutrho</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
+    <span class="n">occupations</span><span class="o">=</span><span class="s1">&#39;smearing&#39;</span><span class="p">,</span>
+    <span class="n">smearing</span><span class="o">=</span><span class="s1">&#39;methfessel-paxton&#39;</span><span class="p">,</span>
+    <span class="n">degauss</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span>
+ <span class="o">/</span>
+ <span class="o">&amp;</span><span class="n">electrons</span>
+    <span class="n">conv_thr</span> <span class="o">=</span>  <span class="mf">1.0</span><span class="n">d</span><span class="o">-</span><span class="mi">10</span>
+    <span class="n">mixing_beta</span> <span class="o">=</span> <span class="mf">0.7</span>
+ <span class="o">/</span>
+ <span class="o">&amp;</span><span class="n">ions</span>
+ <span class="o">/</span>
+ <span class="o">&amp;</span><span class="n">cell</span>
+ <span class="o">/</span>
+<span class="n">ATOMIC_SPECIES</span>
+ <span class="n">Nb</span>   <span class="mf">92.90638</span>   <span class="n">Nb</span><span class="o">.</span><span class="n">pbe</span><span class="o">-</span><span class="n">nsp</span><span class="o">-</span><span class="n">van</span><span class="o">.</span><span class="n">UPF</span>
+<span class="n">ATOMIC_POSITIONS</span>
+ <span class="n">Nb</span> <span class="mf">0.00</span> <span class="mf">0.00</span> <span class="mf">0.00</span>
+<span class="n">K_POINTS</span> <span class="p">{</span><span class="n">automatic</span><span class="p">}</span>
+ <span class="mi">16</span> <span class="mi">16</span> <span class="mi">16</span>  <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>pw.x &lt; nscf.in &gt; nscf.out</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span> <span class="o">&amp;</span><span class="n">control</span>
+    <span class="n">calculation</span><span class="o">=</span><span class="s1">&#39;nscf&#39;</span>
+    <span class="n">restart_mode</span><span class="o">=</span><span class="s1">&#39;from_scratch&#39;</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;nb&#39;</span><span class="p">,</span>
+    <span class="n">pseudo_dir</span> <span class="o">=</span> <span class="s1">&#39;~/PWSCF/pseudo&#39;</span><span class="p">,</span>
+    <span class="n">outdir</span><span class="o">=</span><span class="s1">&#39;./work&#39;</span>
+    <span class="n">disk_io</span><span class="o">=</span><span class="s1">&#39;low&#39;</span>
+ <span class="o">/</span>
+ <span class="o">&amp;</span><span class="n">system</span>
+    <span class="n">ibrav</span><span class="o">=</span>  <span class="mi">3</span><span class="p">,</span> <span class="n">celldm</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">6.246</span><span class="p">,</span> <span class="n">nat</span><span class="o">=</span>  <span class="mi">1</span><span class="p">,</span> <span class="n">ntyp</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">ecutwfc</span> <span class="o">=</span> <span class="mf">30.0</span><span class="p">,</span>
+    <span class="n">ecutrho</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
+    <span class="n">occupations</span><span class="o">=</span><span class="s1">&#39;smearing&#39;</span><span class="p">,</span>
+    <span class="n">smearing</span><span class="o">=</span><span class="s1">&#39;methfessel-paxton&#39;</span><span class="p">,</span>
+    <span class="n">degauss</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span>
+ <span class="o">/</span>
+ <span class="o">&amp;</span><span class="n">electrons</span>
+    <span class="n">conv_thr</span> <span class="o">=</span>  <span class="mf">1.0</span><span class="n">d</span><span class="o">-</span><span class="mi">10</span>
+    <span class="n">mixing_beta</span> <span class="o">=</span> <span class="mf">0.7</span>
+ <span class="o">/</span>
+ <span class="o">&amp;</span><span class="n">ions</span>
+ <span class="o">/</span>
+ <span class="o">&amp;</span><span class="n">cell</span>
+ <span class="o">/</span>
+<span class="n">ATOMIC_SPECIES</span>
+ <span class="n">Nb</span>   <span class="mf">92.90638</span>   <span class="n">Nb</span><span class="o">.</span><span class="n">pbe</span><span class="o">-</span><span class="n">nsp</span><span class="o">-</span><span class="n">van</span><span class="o">.</span><span class="n">UPF</span>
+<span class="n">ATOMIC_POSITIONS</span>
+ <span class="n">Nb</span> <span class="mf">0.00</span> <span class="mf">0.00</span> <span class="mf">0.00</span>
+<span class="n">K_POINTS</span> <span class="p">{</span><span class="n">automatic</span><span class="p">}</span>
+ <span class="mi">8</span> <span class="mi">8</span> <span class="mi">8</span>  <span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>ph.x &lt; elph.in &gt; elph.out</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Electron</span><span class="o">-</span><span class="n">phonon</span> <span class="n">coefficients</span>
+ <span class="o">&amp;</span><span class="n">inputph</span>
+  <span class="n">tr2_ph</span><span class="o">=</span><span class="mf">1.0</span><span class="n">d</span><span class="o">-</span><span class="mi">16</span><span class="p">,</span>
+  <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;nb&#39;</span><span class="p">,</span>
+  <span class="n">fildvscf</span><span class="o">=</span><span class="s1">&#39;nbdv&#39;</span><span class="p">,</span>
+  <span class="n">fildyn</span><span class="o">=</span><span class="s1">&#39;nb.dyn&#39;</span><span class="p">,</span>
+  <span class="n">outdir</span><span class="o">=</span><span class="s1">&#39;./work&#39;</span>
+  <span class="n">reduce_io</span><span class="o">=.</span><span class="n">true</span><span class="o">.</span>
+  <span class="n">electron_phonon</span><span class="o">=</span><span class="s1">&#39;simple&#39;</span>
+  <span class="n">trans</span><span class="o">=.</span><span class="n">true</span><span class="o">.</span><span class="p">,</span>
+  <span class="n">ldisp</span><span class="o">=.</span><span class="n">true</span><span class="o">.</span>
+  <span class="n">el_ph_sigma</span> <span class="o">=</span> <span class="mf">0.005</span><span class="n">d0</span>
+  <span class="n">nq1</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">nq2</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">nq3</span><span class="o">=</span><span class="mi">8</span>
+ <span class="o">/</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calculate-lambda-and-omega-log-using-the-gaussian-smearing-method">
+<h2>Calculate lambda and omega_log using the Gaussian smearing method<a class="headerlink" href="#calculate-lambda-and-omega-log-using-the-gaussian-smearing-method" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>lambda_weight.x &lt; lambda.in &gt; lambda.out</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span></span>  <span class="o">&amp;</span><span class="nb">input</span>
+    <span class="n">filelph</span> <span class="o">=</span> <span class="s1">&#39;nb.dyn&#39;</span>
+    <span class="n">mustar</span> <span class="o">=</span> <span class="mf">0.20</span>
+  <span class="o">/</span>
+  <span class="mi">29</span>
+ <span class="mf">0.0000000</span>   <span class="mf">0.0000000</span>   <span class="mf">0.0000000</span>  <span class="mf">0.0039062</span>
+ <span class="mf">0.0000000</span>  <span class="o">-</span><span class="mf">0.1250000</span>   <span class="mf">0.1250000</span>  <span class="mf">0.0468750</span>
+ <span class="mf">0.0000000</span>  <span class="o">-</span><span class="mf">0.2500000</span>   <span class="mf">0.2500000</span>  <span class="mf">0.0468750</span>
+ <span class="mf">0.0000000</span>  <span class="o">-</span><span class="mf">0.3750000</span>   <span class="mf">0.3750000</span>  <span class="mf">0.0468750</span>
+ <span class="mf">0.0000000</span>   <span class="mf">0.5000000</span>  <span class="o">-</span><span class="mf">0.5000000</span>  <span class="mf">0.0234375</span>
+<span class="o">-</span><span class="mf">0.1250000</span>  <span class="o">-</span><span class="mf">0.1250000</span>   <span class="mf">0.2500000</span>  <span class="mf">0.0937500</span>
+<span class="o">-</span><span class="mf">0.1250000</span>  <span class="o">-</span><span class="mf">0.2500000</span>   <span class="mf">0.3750000</span>  <span class="mf">0.1875000</span>
+<span class="o">-</span><span class="mf">0.1250000</span>   <span class="mf">0.6250000</span>  <span class="o">-</span><span class="mf">0.5000000</span>  <span class="mf">0.1875000</span>
+<span class="o">-</span><span class="mf">0.2500000</span>   <span class="mf">0.7500000</span>  <span class="o">-</span><span class="mf">0.5000000</span>  <span class="mf">0.0937500</span>
+<span class="o">-</span><span class="mf">0.2500000</span>   <span class="mf">0.6250000</span>  <span class="o">-</span><span class="mf">0.3750000</span>  <span class="mf">0.0937500</span>
+ <span class="mf">0.0000000</span>   <span class="mf">0.0000000</span>   <span class="mf">0.2500000</span>  <span class="mf">0.0234375</span>
+ <span class="mf">0.0000000</span>  <span class="o">-</span><span class="mf">0.1250000</span>   <span class="mf">0.3750000</span>  <span class="mf">0.0937500</span>
+ <span class="mf">0.0000000</span>  <span class="o">-</span><span class="mf">0.2500000</span>   <span class="mf">0.5000000</span>  <span class="mf">0.0937500</span>
+ <span class="mf">0.0000000</span>   <span class="mf">0.6250000</span>  <span class="o">-</span><span class="mf">0.3750000</span>  <span class="mf">0.0468750</span>
+<span class="o">-</span><span class="mf">0.1250000</span>  <span class="o">-</span><span class="mf">0.1250000</span>   <span class="mf">0.5000000</span>  <span class="mf">0.0937500</span>
+<span class="o">-</span><span class="mf">0.1250000</span>   <span class="mf">0.7500000</span>  <span class="o">-</span><span class="mf">0.3750000</span>  <span class="mf">0.1875000</span>
+<span class="o">-</span><span class="mf">0.2500000</span>   <span class="mf">0.2500000</span>   <span class="mf">0.2500000</span>  <span class="mf">0.0312500</span>
+<span class="o">-</span><span class="mf">0.2500000</span>   <span class="mf">0.7500000</span>  <span class="o">-</span><span class="mf">0.2500000</span>  <span class="mf">0.0312500</span>
+ <span class="mf">0.6250000</span>  <span class="o">-</span><span class="mf">0.6250000</span>   <span class="mf">0.2500000</span>  <span class="mf">0.0937500</span>
+ <span class="mf">0.5000000</span>  <span class="o">-</span><span class="mf">0.5000000</span>   <span class="mf">0.2500000</span>  <span class="mf">0.0468750</span>
+ <span class="mf">0.5000000</span>  <span class="o">-</span><span class="mf">0.6250000</span>   <span class="mf">0.3750000</span>  <span class="mf">0.0937500</span>
+ <span class="mf">0.0000000</span>   <span class="mf">0.0000000</span>   <span class="mf">0.5000000</span>  <span class="mf">0.0234375</span>
+ <span class="mf">0.0000000</span>  <span class="o">-</span><span class="mf">0.1250000</span>   <span class="mf">0.6250000</span>  <span class="mf">0.0937500</span>
+ <span class="mf">0.0000000</span>   <span class="mf">0.7500000</span>  <span class="o">-</span><span class="mf">0.2500000</span>  <span class="mf">0.0468750</span>
+<span class="o">-</span><span class="mf">0.1250000</span>   <span class="mf">0.8750000</span>  <span class="o">-</span><span class="mf">0.2500000</span>  <span class="mf">0.0937500</span>
+ <span class="mf">0.5000000</span>  <span class="o">-</span><span class="mf">0.5000000</span>   <span class="mf">0.5000000</span>  <span class="mf">0.0078125</span>
+ <span class="mf">0.0000000</span>   <span class="mf">0.0000000</span>   <span class="mf">0.7500000</span>  <span class="mf">0.0234375</span>
+ <span class="mf">0.0000000</span>   <span class="mf">0.8750000</span>  <span class="o">-</span><span class="mf">0.1250000</span>  <span class="mf">0.0468750</span>
+ <span class="mf">0.0000000</span>   <span class="mf">0.0000000</span>  <span class="o">-</span><span class="mf">1.0000000</span>  <span class="mf">0.0039062</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calculate-lambda-and-omega-log-using-the-weighted-average-method">
+<h2>Calculate lambda and omega_log using the weighted average method<a class="headerlink" href="#calculate-lambda-and-omega-log-using-the-weighted-average-method" title="Permalink to this headline">¶</a></h2>
+<p>lambda_weight.x &lt; lambda_weight.in &gt; lambda_weight.out</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>&amp;input
+  filelph = &#39;nb.dyn&#39;
+  mustar = 0.20
+  DOStetra = 1.487d0   ! DOS obtained by tetrahedron method
+/
+29
+0.0000000   0.0000000   0.0000000  0.0039062
+0.0000000  -0.1250000   0.1250000  0.0468750
+0.0000000  -0.2500000   0.2500000  0.0468750
+0.0000000  -0.3750000   0.3750000  0.0468750
+0.0000000   0.5000000  -0.5000000  0.0234375
+-0.1250000  -0.1250000   0.2500000  0.0937500
+-0.1250000  -0.2500000   0.3750000  0.1875000
+-0.1250000   0.6250000  -0.5000000  0.1875000
+-0.2500000   0.7500000  -0.5000000  0.0937500
+-0.2500000   0.6250000  -0.3750000  0.0937500
+0.0000000   0.0000000   0.2500000  0.0234375
+0.0000000  -0.1250000   0.3750000  0.0937500
+0.0000000  -0.2500000   0.5000000  0.0937500
+0.0000000   0.6250000  -0.3750000  0.0468750
+-0.1250000  -0.1250000   0.5000000  0.0937500
+-0.1250000   0.7500000  -0.3750000  0.1875000
+-0.2500000   0.2500000   0.2500000  0.0312500
+-0.2500000   0.7500000  -0.2500000  0.0312500
+0.6250000  -0.6250000   0.2500000  0.0937500
+0.5000000  -0.5000000   0.2500000  0.0468750
+0.5000000  -0.6250000   0.3750000  0.0937500
+0.0000000   0.0000000   0.5000000  0.0234375
+0.0000000  -0.1250000   0.6250000  0.0937500
+0.0000000   0.7500000  -0.2500000  0.0468750
+-0.1250000   0.8750000  -0.2500000  0.0937500
+0.5000000  -0.5000000   0.5000000  0.0078125
+0.0000000   0.0000000   0.7500000  0.0234375
+0.0000000   0.8750000  -0.1250000  0.0468750
+0.0000000   0.0000000  -1.0000000  0.0039062
+</pre></div>
+</div>
+<div class="figure">
+<img alt="../_images/lambda_weight.png" src="../_images/lambda_weight.png" />
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="vasp.html" class="btn btn-neutral float-right" title="VASP" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="Kocochi!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ruoitrau.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+Sctk 
+========
+
+The following tutorial should be done in ``sample/``.
+
+The pseudopotentials
+
+::
+
+   B.pbe-n-rrkjus_psl.0.1.UPF
+   Mg.pbe-n-rrkjus_psl.0.3.0.UPF
+   
+are the part of the `PS Library <http://theossrv1.epfl.ch/Main/Pseudopotentials>`_
+developed by `THEOS group <http://theossrv1.epfl.ch/>`_.
+
+.. _scf:
+
+SCF calculation of the charge density
+-------------------------------------
+
+**Input file**: scf.in
+
+**Program**: pw.x (Quantum ESPRESSO)
+
+.. code-block:: bash
+
+    mpiexec option PATH/pw.x option -in scf.in > scf.out
+
+:: 
+
+    mpiexec option PATH/pw.x option -in scf.in > scf.out
+        
+Run ``pw.x`` with ``calculation = "scf"``.
+
+.. note::
+
+   We can perform first whether :ref:`phonon` or `coulomb` .
+
+.. _phonon:
+
+Calculations of phonon and electron-phonon interaction
+------------------------------------------------------
+
+.. _ph:
+
+Calculation of phonon frequency and deformation potential
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Input file**: ph.in
+
+**Program**: ph.x (Quantum ESPRESSO)
+
+**Important parameter**
+
+   ``fildyn = 'mgb2.dyn'``: The file name for the dynamical matrix;
+                            It will be used in the next step.
+
+   ``fildvscf = 'dv',``: The file name for the deformation potential.
+                         It will be used in the next step.
+
+   ``ldisp = .true.``: We compute phonons on the uniform :math:`q` grid.
+
+   ``lshift_q = .true.``: We shift the :math:`q` grid for avoiding
+                          the singularity at :math:`\Gamma` point.
+
+   ``nq1, nq2, nq3``: The :math:`q` grid.
+
+.. code-block:: bash
+
+   mpiexec option PATH/ph.x option -in ph.in > ph.out
+        
+.. note::
+   
+   If you are familiar to the ``ph.x`` program,
+   it is better to run in each :math:`q` separately.
+
+.. _elph:
+
+Calculation of electron-phonon interaction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Input file**: elph.in
+
+**Program**: ph.x (Quantum ESPRESSO)
+
+**Important parameter**
+
+   ``electron_phonon = "scdft_input"``:
+   compute the electron-phonon vertex from the deformation potential and
+   the dynamical matrix that are already computed.
+
+   ``elph_nbnd_min, elph_nbnd_max``:
+   Since the electron-phonon interaction between the electronic states
+   only in the vicinity of the Fermi surface affect the gap equation,
+   we can reduce bands to decrease the numerical cost.
+   The upper- and the lower limit of the bands that contain the Fermi level
+   can be obtained by a program ``fermi_velocity.x`` in patched Quantum ESPRESSO.
+
+By running ``ph.x`` with ``electron_phonon = "scdft_input"``,
+
+.. code-block:: bash
+
+   mpiexec option PATH/ph.x option -in elph.in > elph.out
+        
+.. _coulomb:
+   
+Calculation of screened Coulomb interaction
+-------------------------------------------
+
+.. _dense:
+
+Non-SCF calculation with a dense :math:`k` grid
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Input file**: nscf.in
+
+**Program**: pw.x (Quantum ESPRESSO)
+
+**Important parameter**
+
+   ``calculation = "nscf"``
+
+   ``nbnd``: For the calculating of the polarization function,
+   we have to compute some empty states.
+   We do not have to include so many empty state
+   as the calculation of the insulator. 
+   Typically, the number of empty states becomes
+   the same as the number of occupied states.
+   
+.. code-block:: bash
+
+   mpiexec option PATH/pw.x option -in nscf.in > nscf.out        
+
+Run ``pw.x`` with ``calculation = "nscf"``.
+Then execute ``get_eigval.x``
+
+.. code-block:: bash
+
+   PATH/get_eigval.x
+        
+Input ``prefix`` the same as that of ``pw.x``.
+
+.. _twin:
+
+Calculation of wave functions for the screened Coulomb interaction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Input file**: twin.in
+
+**Program**: pw.x (Quantum ESPRESSO)
+
+**Important parameter**
+
+``wf_collect = .true.``
+
+``calculation = "bands"``:
+   Generated :math:`k` points by using
+   :ref:`twingrid` and redirect it to the input file as follows:
+
+.. code-block:: bash
+
+   PATH/twingrid.sh 6 6 4 >> twin.in
+        
+This :math:`k` mesh must be the same as ``nq1``, ``nq2``, and ``nq3`` in the
+input of ``ph.x`` at Sec. :ref:`elph` Then run ``pw.x`` with this input file.
+
+.. code-block:: bash
+
+   mpiexec option PATH/pw.x option -in twin.in > twin.out
+        
+Calculation of screened Coulomb interaction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Input file**: rpa.in
+
+**Program**: :ref:`rpa_el.x <rpa>`
+
+.. note::
+
+   This part can be performed in each :math:`q` point separately by creating
+   input files with different ``first_q`` and run simultaneously.
+
+.. code-block:: bash
+
+   mpiexec option PATH/rpa_el.x < rpa.in > rpa.out
+        
+.. _scdftscf:
+   
+SCDFT SCF calculation
+---------------------
+
+**Input file**: scdft.in
+
+**Program**: :ref:`scdft`
+
+After all calculation in :ref:`phonon` and :ref:`coulomb` finished,
+we can start SCDFT calculation.
+
+.. code-block:: bash
+
+   mpiexec option PATH/scdft.x < scdft.in > scdft.out        
+
+Post processing
+---------------
+
+**Input file**: scdft.in
+
+**Program**: :ref:`deltaf`
+
+We can compute the following quantities from
+``delta.dat`` ( :math:`\Delta_{n k}` which is generated in Sec. :ref:`scdftscf` .
+
+:math:`\Delta_{n k}` on the Fermi surface.
+FermiSurfer( http://fermisurfer.osdn.jp/ ) can display this data.
+
+   .. code-block:: bash
+
+      mpiexec option PATH/deltaf.x < scdft.in > deltaf.out
+        
+   .. figure:: ../figs/gap_mgb2.png
+   
+      Gap function on the Fermi surface of MgB\ :math:`_2` .
+
+Quasi particle DOS. It requires long computational time.
+
+   .. code-block:: bash
+
+      mpiexec option PATH/qpdos.x < scdft.in > qpdos.out
+        
+Ultrasonic attenuation coefficient(experimental). Results are in
+standard output.
+
+   .. code-block:: bash
+
+      mpiexec option PATH/ultrasonic.x < scdft.in > ultrasonic.out
+        
